@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(titulo='Nova consulta')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: navbar}"></div>
+<div class="container-estreito">
+    <div class="card">
+        <h1>Nova consulta</h1>
+
+        <form th:action="@{/consultas}" th:object="${consultaRequest}" method="post">
+            <div class="form-grupo">
+                <label for="petId">Pet</label>
+                <select id="petId" th:field="*{petId}">
+                    <option th:each="p : ${pets}" th:value="${p.id}" th:text="${p.nome}"></option>
+                </select>
+                <div class="erro-campo" th:if="${#fields.hasErrors('petId')}" th:errors="*{petId}"></div>
+            </div>
+
+            <div class="form-grupo">
+                <label for="data">Data</label>
+                <input type="date" id="data" th:field="*{data}"/>
+                <div class="erro-campo" th:if="${#fields.hasErrors('data')}" th:errors="*{data}"></div>
+            </div>
+
+            <div class="form-grupo">
+                <label for="horario">Horário</label>
+                <input type="time" id="horario" th:field="*{horario}"/>
+                <div class="erro-campo" th:if="${#fields.hasErrors('horario')}" th:errors="*{horario}"></div>
+            </div>
+
+            <div class="form-grupo">
+                <label for="clinica">Clínica</label>
+                <input type="text" id="clinica" th:field="*{clinica}"/>
+                <div class="erro-campo" th:if="${#fields.hasErrors('clinica')}" th:errors="*{clinica}"></div>
+            </div>
+
+            <div class="form-grupo">
+                <label for="veterinario">Veterinário</label>
+                <input type="text" id="veterinario" th:field="*{veterinario}"/>
+            </div>
+
+            <div class="form-grupo">
+                <label for="motivo">Motivo</label>
+                <input type="text" id="motivo" th:field="*{motivo}"/>
+                <div class="erro-campo" th:if="${#fields.hasErrors('motivo')}" th:errors="*{motivo}"></div>
+            </div>
+
+            <div class="form-grupo">
+                <label for="observacoes">Observações</label>
+                <textarea id="observacoes" th:field="*{observacoes}" rows="3"></textarea>
+            </div>
+
+            <button type="submit" class="btn" style="width:100%">Agendar</button>
+        </form>
+        <p style="margin-top:12px;"><a th:href="@{/consultas}">&larr; Voltar para minhas consultas</a></p>
+    </div>
+</div>
+<div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>

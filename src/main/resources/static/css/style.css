@@ -1,0 +1,129 @@
+:root {
+    --roxo: #6C3BFF;
+    --roxo-escuro: #4E22CC;
+    --roxo-claro: #EFEAFF;
+    --cinza: #6B7280;
+    --cinza-claro: #F5F6FA;
+    --branco: #FFFFFF;
+    --verde: #2E9E5B;
+    --amarelo: #D9A400;
+    --vermelho: #D64545;
+    --raio: 12px;
+    --sombra: 0 2px 10px rgba(30, 20, 60, 0.08);
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", Roboto, Arial, sans-serif;
+    background: var(--cinza-claro);
+    color: #1F1B2E;
+}
+
+a { color: var(--roxo); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.navbar {
+    background: var(--roxo);
+    color: var(--branco);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.navbar .marca { font-size: 1.3rem; font-weight: 700; color: var(--branco); }
+.navbar nav a { color: var(--branco); margin-left: 18px; font-weight: 500; opacity: 0.9; }
+.navbar nav a:hover { opacity: 1; text-decoration: none; }
+.navbar form { display: inline; margin-left: 18px; }
+.navbar button.link {
+    background: none; border: none; color: var(--branco); font-weight: 500;
+    cursor: pointer; opacity: 0.9; font-size: 1rem; padding: 0;
+}
+
+.container { max-width: 1100px; margin: 0 auto; padding: 24px 16px; }
+.container-estreito { max-width: 460px; margin: 60px auto; padding: 0 16px; }
+
+.card {
+    background: var(--branco);
+    border-radius: var(--raio);
+    box-shadow: var(--sombra);
+    padding: 24px;
+    margin-bottom: 20px;
+}
+
+.card h1, .card h2 { margin-top: 0; }
+
+.grid { display: grid; gap: 20px; }
+.grid-3 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.grid-2 { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+
+.metrica { text-align: center; }
+.metrica .numero { font-size: 2.2rem; font-weight: 700; color: var(--roxo); }
+.metrica .label { color: var(--cinza); font-size: 0.9rem; }
+
+.btn {
+    display: inline-block;
+    background: var(--roxo);
+    color: var(--branco);
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+}
+.btn:hover { background: var(--roxo-escuro); text-decoration: none; color: var(--branco); }
+.btn.secundario { background: var(--branco); color: var(--roxo); border: 1px solid var(--roxo); }
+.btn.perigo { background: var(--vermelho); }
+.btn.pequeno { padding: 6px 12px; font-size: 0.85rem; }
+
+.form-grupo { margin-bottom: 16px; }
+.form-grupo label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 0.92rem; }
+.form-grupo input, .form-grupo select, .form-grupo textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #D9D6E8;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+}
+.form-grupo input:focus, .form-grupo select:focus, .form-grupo textarea:focus {
+    outline: none; border-color: var(--roxo);
+}
+.erro-campo { color: var(--vermelho); font-size: 0.85rem; margin-top: 4px; }
+
+.alerta { padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; font-size: 0.92rem; }
+.alerta.erro { background: #FBE7E7; color: var(--vermelho); }
+.alerta.sucesso { background: #E5F6EC; color: var(--verde); }
+
+table { width: 100%; border-collapse: collapse; }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid #EEE; }
+th { color: var(--cinza); font-size: 0.85rem; text-transform: uppercase; }
+
+.selo { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 0.78rem; font-weight: 600; }
+.selo.em_dia, .selo.concluida { background: #E5F6EC; color: var(--verde); }
+.selo.proxima, .selo.agendada { background: #FFF4DA; color: var(--amarelo); }
+.selo.atrasada, .selo.cancelada { background: #FBE7E7; color: var(--vermelho); }
+
+.footer {
+    text-align: center;
+    color: var(--cinza);
+    font-size: 0.85rem;
+    padding: 30px 16px;
+}
+
+.filtros { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+.filtros a {
+    padding: 6px 14px; border-radius: 999px; background: var(--roxo-claro); color: var(--roxo-escuro);
+    font-size: 0.88rem; font-weight: 600;
+}
+.filtros a.ativo { background: var(--roxo); color: var(--branco); }
+
+@media (max-width: 640px) {
+    .navbar { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .navbar nav { display: flex; flex-wrap: wrap; }
+    .navbar nav a, .navbar form { margin-left: 0; margin-right: 14px; }
+}

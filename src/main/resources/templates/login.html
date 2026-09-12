@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(titulo='Entrar')}"></head>
+<body>
+<div class="container-estreito">
+    <div class="card">
+        <h1>Entrar</h1>
+        <p style="color:var(--cinza)">Acesse o painel Clyvo Vet.</p>
+
+        <div class="alerta erro" th:if="${param.error}">
+            E-mail ou senha inválidos.
+        </div>
+        <div class="alerta sucesso" th:if="${param.logout}">
+            Você saiu da sua conta.
+        </div>
+
+        <form th:action="@{/login}" method="post">
+            <div class="form-grupo">
+                <label for="username">E-mail</label>
+                <input type="email" id="username" name="username" required autofocus/>
+            </div>
+            <div class="form-grupo">
+                <label for="password">Senha</label>
+                <input type="password" id="password" name="password" required/>
+            </div>
+            <button type="submit" class="btn" style="width:100%">Entrar</button>
+        </form>
+
+        <p style="margin-top:16px; text-align:center;">
+            Não tem conta? <a th:href="@{/cadastro}">Cadastre-se</a>
+        </p>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(titulo='Meus pets')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: navbar}"></div>
+<div class="container">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h1>Meus pets</h1>
+        <a th:href="@{/pets/novo}" class="btn">+ Novo pet</a>
+    </div>
+
+    <div class="card">
+        <table>
+            <thead>
+            <tr><th>Nome</th><th>Espécie</th><th>Raça</th><th>Sexo</th><th>Peso</th><th></th></tr>
+            </thead>
+            <tbody>
+            <tr th:each="pet : ${pets}">
+                <td th:text="${pet.nome}">Thor</td>
+                <td th:text="${pet.especie.valor}">cachorro</td>
+                <td th:text="${pet.raca}">Golden Retriever</td>
+                <td th:text="${pet.sexo.valor}">Macho</td>
+                <td th:text="${pet.peso} + ' kg'">28.4 kg</td>
+                <td style="white-space:nowrap;">
+                    <a th:href="@{/pets/{id}/vacinas(id=${pet.id})}" class="btn secundario pequeno">Vacinas</a>
+                    <a th:href="@{/pets/{id}/editar(id=${pet.id})}" class="btn secundario pequeno">Editar</a>
+                    <form th:action="@{/pets/{id}/excluir(id=${pet.id})}" method="post" style="display:inline;"
+                          onsubmit="return confirm('Excluir este pet?');">
+                        <button type="submit" class="btn perigo pequeno">Excluir</button>
+                    </form>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(pets)}">
+                <td colspan="6" style="text-align:center; color:var(--cinza);">Nenhum pet cadastrado ainda.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>

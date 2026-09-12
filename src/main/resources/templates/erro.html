@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(titulo=${titulo})}"></head>
+<body>
+<div th:replace="~{fragments/layout :: navbar}"></div>
+<div class="container-estreito">
+    <div class="card" style="text-align:center;">
+        <h1 th:text="${titulo}">Ops</h1>
+        <p th:text="${mensagem}">Algo deu errado.</p>
+        <a th:href="@{/dashboard}" class="btn">Voltar ao dashboard</a>
+    </div>
+</div>
+<div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>

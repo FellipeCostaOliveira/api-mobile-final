@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(titulo='Agenda do dia')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: navbar}"></div>
+<div class="container">
+    <h1>Agenda do dia</h1>
+    <p style="color:var(--cinza)" th:text="'Consultas agendadas para ' + ${hoje}">Consultas de hoje</p>
+
+    <div class="card">
+        <table>
+            <thead>
+            <tr><th>Horário</th><th>Pet</th><th>Tutor</th><th>Clínica</th><th>Motivo</th><th></th></tr>
+            </thead>
+            <tbody>
+            <tr th:each="c : ${agenda}">
+                <td th:text="${c.horario}">09:00</td>
+                <td th:text="${c.pet.nome}">Thor</td>
+                <td th:text="${c.tutor.nome}">Ana Beatriz Lima</td>
+                <td th:text="${c.clinica}">Clyvo Vet</td>
+                <td th:text="${c.motivo}">Vacinação</td>
+                <td>
+                    <a th:href="@{/vet/atendimento/{id}(id=${c.id})}" class="btn pequeno">Atender</a>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(agenda)}">
+                <td colspan="6" style="text-align:center; color:var(--cinza);">Nenhuma consulta agendada para hoje.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>

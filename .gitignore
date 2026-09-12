@@ -1,0 +1,20 @@
+# Build
+target/
+*.class
+
+# Configuracao sensivel - NUNCA versionar
+# (application.yml NAO entra aqui: ele so contem placeholders ${DB_URL} etc,
+# os valores reais ficam nas variaveis de ambiente do Render, nunca no arquivo)
+*.env
+.env
+firebase-credentials*.json
+serviceAccountKey.json
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.DS_Store
+
+# Logs
+*.log

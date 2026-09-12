@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <th:block th:fragment="head(titulo)">
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title th:text="${titulo} + ' — Clyvo Vet'">Clyvo Vet</title>
+        <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    </th:block>
+</head>
+<body>
+    <div class="navbar" th:fragment="navbar">
+        <div class="marca">🐾 Clyvo Vet</div>
+        <nav>
+            <a th:href="@{/dashboard}">Dashboard</a>
+            <a th:href="@{/pets}">Pets</a>
+            <a th:href="@{/consultas}">Consultas</a>
+            <a th:href="@{/vet/agenda}" sec:authorize="hasRole('VETERINARIO')">Agenda</a>
+            <span sec:authentication="name" style="margin-left:18px; opacity:0.85;"></span>
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="link">Sair</button>
+            </form>
+        </nav>
+    </div>
+
+    <div class="footer" th:fragment="footer">
+        Clyvo Vet — Challenge FIAP 2026 · Pedro Henrique dos Santos Costa (RM562156) ·
+        Eduardo Augusto de Oliveira Souza (RM565269) · Fellipe Costa de Oliveira (RM564673) ·
+        Felype Ferreira Maschio (RM563009) · Gustavo Vieira de Matos (RM563304)
+    </div>
+</body>
+</html>

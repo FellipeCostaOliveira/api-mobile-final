@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(titulo='Registrar atendimento')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: navbar}"></div>
+<div class="container-estreito">
+    <div class="card">
+        <h1>Registrar atendimento</h1>
+        <p>
+            <strong th:text="${consulta.pet.nome}">Thor</strong> —
+            <span th:text="${consulta.motivo}">Vacinação</span> —
+            <span th:text="${consulta.data} + ' ' + ${consulta.horario}">2026-09-24 14:30</span>
+        </p>
+
+        <form th:action="@{/vet/atendimento/{id}(id=${consulta.id})}" th:object="${prontuarioRequest}" method="post">
+            <div class="form-grupo">
+                <label for="diagnostico">Diagnóstico</label>
+                <textarea id="diagnostico" th:field="*{diagnostico}" rows="3"></textarea>
+                <div class="erro-campo" th:if="${#fields.hasErrors('diagnostico')}" th:errors="*{diagnostico}"></div>
+            </div>
+
+            <div class="form-grupo">
+                <label for="prescricao">Prescrição</label>
+                <textarea id="prescricao" th:field="*{prescricao}" rows="3"></textarea>
+            </div>
+
+            <div class="form-grupo">
+                <label for="pesoAferido">Peso aferido (kg)</label>
+                <input type="number" step="0.01" id="pesoAferido" th:field="*{pesoAferido}"/>
+                <div class="erro-campo" th:if="${#fields.hasErrors('pesoAferido')}" th:errors="*{pesoAferido}"></div>
+            </div>
+
+            <div class="form-grupo">
+                <label for="retornoEm">Data de retorno (opcional)</label>
+                <input type="date" id="retornoEm" th:field="*{retornoEm}"/>
+            </div>
+
+            <button type="submit" class="btn" style="width:100%">Concluir atendimento</button>
+        </form>
+        <p style="margin-top:12px;"><a th:href="@{/vet/agenda}">&larr; Voltar para a agenda</a></p>
+    </div>
+</div>
+<div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>

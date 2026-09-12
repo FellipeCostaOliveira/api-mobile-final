@@ -1,0 +1,114 @@
+COMO ABRIR ESTE PROJETO NO ECLIPSE — Clyvo Vet Backend
+========================================================
+
+Este é o projeto Maven completo, já com a correção do erro 500
+(ciclo de dependência) e do erro 302 (redirect indevido pro login).
+
+PASSO A PASSO — IMPORTAR NO ECLIPSE
+------------------------------------
+
+1. Extraia este zip em uma pasta qualquer (ex.: Documentos\clyvovet).
+   NÃO extraia dentro de uma pasta que já tem outro projeto.
+
+2. Abra o Eclipse.
+
+3. Menu superior: File → Import...
+
+4. Na janela que abrir, digite "maven" na busca, selecione:
+       Maven → Existing Maven Projects
+   Clique em Next.
+
+5. Em "Root Directory", clique em Browse... e selecione a pasta
+   onde você extraiu o zip (a pasta que tem o arquivo pom.xml
+   dentro dela).
+
+6. O Eclipse vai mostrar uma lista com um projeto marcado
+   (checkbox já vem marcado). Clique em Finish.
+
+7. Espere a barra de progresso no canto inferior direito
+   terminar (ela baixa as dependências do projeto — Spring,
+   Firebase, etc. Pode levar alguns minutos na primeira vez,
+   precisa de internet).
+
+8. Depois de terminar, confira a aba "Problems" (Window → Show
+   View → Problems, se não estiver visível). NÃO deve ter nenhum
+   erro (ícone vermelho de "X"). Avisos amarelos são normais.
+
+SE APARECER ERRO DEPOIS DE IMPORTAR
+------------------------------------
+
+- Clique com botão direito no projeto → Maven → Update Project...
+  → marque "Force Update of Snapshots/Releases" → OK.
+
+- Se ainda der erro de versão de Java: botão direito no projeto
+  → Properties → Java Compiler → confira se está em 21 (ou o
+  mais próximo disponível, tipo 17). Faça o mesmo em
+  Properties → Java Build Path → Libraries.
+
+RODAR O PROJETO LOCALMENTE (opcional)
+------------------------------------
+
+Só funciona com as variáveis de ambiente configuradas. Sem elas,
+a aplicação sobe mas não conecta no banco nem no Firebase.
+
+1. Botão direito no projeto → Run As → Run Configurations...
+2. Clique duas vezes em "Spring Boot App" (ou "Java Application")
+   para criar uma nova.
+3. Em "Main class", procure e selecione: ClyvoVetApplication
+4. Vá na aba "Environment" (ou "Arguments" → "Environment"
+   dependendo da versão do Eclipse) e adicione:
+
+     DB_URL          = jdbc:postgresql://HOST:5432/NOME_DO_BANCO
+     DB_USER         = usuario_do_banco
+     DB_PASSWORD     = senha_do_banco
+     FIREBASE_CREDENTIALS = (o JSON inteiro da service account,
+                             em uma linha só)
+
+5. Clique em Run.
+
+Se você só quer corrigir e mandar pro Render, NÃO precisa rodar
+localmente — o Render já tem essas variáveis configuradas nele.
+Rodar local é só se quiser testar/depurar na sua máquina.
+
+ENVIAR PRO GITHUB (E O RENDER FAZ O RESTO SOZINHO)
+------------------------------------
+
+Se o Eclipse já está conectado ao Git (EGit):
+
+1. Botão direito no projeto → Team → Commit...
+2. Marque todos os arquivos alterados.
+3. Escreva uma mensagem, ex:
+     fix(security): corrige ordem das cadeias de seguranca
+4. Clique em "Commit and Push".
+
+Se preferir pelo terminal, dentro da pasta do projeto:
+
+   git add .
+   git commit -m "fix(security): corrige ordem das cadeias de seguranca"
+   git push
+
+O Render detecta o push e refaz o deploy sozinho, em uns 2-3 min.
+
+TESTAR SE FUNCIONOU
+------------------------------------
+
+No terminal (Git Bash, cmd, ou o terminal do próprio Eclipse):
+
+   curl -i https://api-mobile-1-usd8.onrender.com/api/v1/pets
+
+Tem que aparecer "401" logo no topo da resposta.
+Se aparecer "500" ou "302", ainda não deu certo.
+
+O QUE JÁ FOI CORRIGIDO NESTE PROJETO
+------------------------------------
+
+Arquivo: src/main/java/br/com/fiap/clyvovet/config/SecurityConfig.java
+  - Separado o PasswordEncoder num arquivo próprio (evita ciclo
+    de dependência que travava o boot da aplicação).
+  - Adicionado um authenticationEntryPoint só da API, que sempre
+    devolve 401 em JSON — nunca mais redireciona pro /login.
+
+Arquivo: src/main/java/br/com/fiap/clyvovet/config/PasswordEncoderConfig.java
+  - Arquivo novo. Só o bean do BCrypt, isolado.
+
+Nenhum outro arquivo do projeto foi alterado.

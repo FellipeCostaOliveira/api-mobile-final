@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(titulo='Dashboard')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: navbar}"></div>
+<div class="container">
+    <h1>Olá, <span th:text="${tutor.nome}">Tutor</span> 👋</h1>
+    <p style="color:var(--cinza)">Aqui está um resumo da sua conta na Clyvo Vet.</p>
+
+    <div class="grid grid-3">
+        <div class="card metrica">
+            <div class="numero" th:text="${totalPets}">0</div>
+            <div class="label">Pets cadastrados</div>
+        </div>
+        <div class="card metrica">
+            <div class="numero" th:text="${consultasAgendadas}">0</div>
+            <div class="label">Consultas agendadas</div>
+        </div>
+        <div class="card metrica">
+            <div class="numero" th:text="${consultasConcluidas}">0</div>
+            <div class="label">Consultas concluídas</div>
+        </div>
+        <div class="card metrica">
+            <div class="numero" th:text="${pendenciasVacina}">0</div>
+            <div class="label">Vacinas pendentes</div>
+        </div>
+    </div>
+
+    <div class="grid grid-2">
+        <div class="card">
+            <h2>Meus pets</h2>
+            <p>Cadastre e acompanhe a saúde dos seus pets.</p>
+            <a th:href="@{/pets}" class="btn">Ver pets</a>
+        </div>
+        <div class="card">
+            <h2>Minhas consultas</h2>
+            <p>Agende, acompanhe e filtre suas consultas.</p>
+            <a th:href="@{/consultas}" class="btn">Ver consultas</a>
+        </div>
+    </div>
+</div>
+<div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(titulo='Minhas consultas')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: navbar}"></div>
+<div class="container">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h1>Minhas consultas</h1>
+        <a th:href="@{/consultas/nova}" class="btn">+ Nova consulta</a>
+    </div>
+
+    <div class="filtros">
+        <a th:href="@{/consultas}" th:classappend="${statusAtual == null} ? 'ativo'">Todas</a>
+        <a th:href="@{/consultas(status='agendada')}" th:classappend="${statusAtual == 'agendada'} ? 'ativo'">Agendadas</a>
+        <a th:href="@{/consultas(status='concluida')}" th:classappend="${statusAtual == 'concluida'} ? 'ativo'">Concluídas</a>
+        <a th:href="@{/consultas(status='cancelada')}" th:classappend="${statusAtual == 'cancelada'} ? 'ativo'">Canceladas</a>
+    </div>
+
+    <div class="card">
+        <table>
+            <thead>
+            <tr><th>Pet</th><th>Data</th><th>Horário</th><th>Clínica</th><th>Motivo</th><th>Status</th><th></th></tr>
+            </thead>
+            <tbody>
+            <tr th:each="c : ${consultas}">
+                <td th:text="${c.pet.nome}">Thor</td>
+                <td th:text="${c.data}">2026-09-24</td>
+                <td th:text="${c.horario}">14:30</td>
+                <td th:text="${c.clinica}">Clyvo Vet</td>
+                <td th:text="${c.motivo}">Vacinação</td>
+                <td><span class="selo" th:classappend="${c.status.valor}" th:text="${c.status.valor}">agendada</span></td>
+                <td>
+                    <form th:if="${c.status.name() == 'AGENDADA'}" th:action="@{/consultas/{id}/cancelar(id=${c.id})}"
+                          method="post" onsubmit="return confirm('Cancelar esta consulta?');">
+                        <button type="submit" class="btn perigo pequeno">Cancelar</button>
+                    </form>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(consultas)}">
+                <td colspan="7" style="text-align:center; color:var(--cinza);">Nenhuma consulta encontrada.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>

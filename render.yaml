@@ -1,0 +1,33 @@
+# Blueprint de infraestrutura como código para o Render.
+# Em https://dashboard.render.com clique em "New +" > "Blueprint" e aponte para
+# o repositório contendo este arquivo — o Render cria o Web Service e o Postgres juntos.
+databases:
+  - name: clyvovet-db
+    plan: free
+    postgresMajorVersion: "16"
+
+services:
+  - type: web
+    name: clyvovet-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    healthCheckPath: /login
+    envVars:
+      # O driver JDBC exige o prefixo "jdbc:postgresql://", que o Render não gera
+      # sozinho — por isso DB_URL fica como sync:false. Depois que o Blueprint
+      # criar o banco "clyvovet-db", abra o banco no dashboard, pegue Hostname e
+      # Port, e defina DB_URL manualmente como:
+      # jdbc:postgresql://<hostname>:<port>/<database>
+      - key: DB_URL
+        sync: false
+      - key: DB_USER
+        fromDatabase:
+          name: clyvovet-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: clyvovet-db
+          property: password
+      - key: FIREBASE_CREDENTIALS
+        sync: false   # defina manualmente no dashboard (cole o JSON da service account)

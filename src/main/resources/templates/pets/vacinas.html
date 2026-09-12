@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(titulo='Carteira de vacinação')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: navbar}"></div>
+<div class="container">
+    <h1>Carteira de vacinação — <span th:text="${pet.nome}">Thor</span></h1>
+
+    <div class="card">
+        <table>
+            <thead>
+            <tr><th>Vacina</th><th>Aplicada em</th><th>Próxima dose</th><th>Lote</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+            <tr th:each="dose : ${doses}">
+                <td th:text="${dose.nome}">Antirrábica</td>
+                <td th:text="${dose.dataAplicacao}">2025-10-05</td>
+                <td th:text="${dose.proximaDose}">2026-10-05</td>
+                <td th:text="${dose.lote}">LT-2025-092</td>
+                <td>
+                    <span class="selo"
+                          th:with="status=${vacinacaoService.classificar(dose)}"
+                          th:classappend="${#strings.toLowerCase(status)}"
+                          th:text="${#strings.toLowerCase(status)}">em_dia</span>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(doses)}">
+                <td colspan="5" style="text-align:center; color:var(--cinza);">Nenhuma dose registrada ainda.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="card" style="max-width:460px;">
+        <h2>Registrar nova dose</h2>
+        <form th:action="@{/pets/{id}/vacinas(id=${pet.id})}" th:object="${vacinaRequest}" method="post">
+            <div class="form-grupo">
+                <label for="nome">Vacina</label>
+                <input type="text" id="nome" th:field="*{nome}" placeholder="Ex.: Antirrábica"/>
+                <div class="erro-campo" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
+            </div>
+            <div class="form-grupo">
+                <label for="dataAplicacao">Data de aplicação</label>
+                <input type="date" id="dataAplicacao" th:field="*{dataAplicacao}"/>
+                <div class="erro-campo" th:if="${#fields.hasErrors('dataAplicacao')}" th:errors="*{dataAplicacao}"></div>
+            </div>
+            <div class="form-grupo">
+                <label for="lote">Lote</label>
+                <input type="text" id="lote" th:field="*{lote}"/>
+            </div>
+            <div class="form-grupo">
+                <label for="veterinario">Veterinário</label>
+                <input type="text" id="veterinario" th:field="*{veterinario}"/>
+            </div>
+            <button type="submit" class="btn" style="width:100%">Registrar dose</button>
+        </form>
+    </div>
+
+    <p><a th:href="@{/pets}">&larr; Voltar para meus pets</a></p>
+</div>
+<div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>

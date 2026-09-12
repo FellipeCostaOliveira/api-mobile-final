@@ -1,0 +1,107 @@
+### Coleção de testes — Clyvo Vet API (/api/v1)
+### Use um cliente REST compatível com .http (IntelliJ HTTP Client, VS Code REST Client)
+### ou copie os curls equivalentes.
+
+@baseUrl = http://localhost:8080/api/v1
+@token = COLE_AQUI_UM_ID_TOKEN_DO_FIREBASE
+
+### 1. Sem token -> 401
+GET {{baseUrl}}/pets
+
+### 2. Lista vazia -> 200 []
+GET {{baseUrl}}/pets?tutorId=qualquer
+Authorization: Bearer {{token}}
+
+### 3. Criar pet -> 201 com id
+POST {{baseUrl}}/pets
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "tutorId": "sera-ignorado",
+  "nome": "Thor",
+  "especie": "cachorro",
+  "raca": "Golden Retriever",
+  "sexo": "Macho",
+  "dataNascimento": "2022-03-15",
+  "peso": "28.4",
+  "castrado": true,
+  "foto": "",
+  "observacoes": "Alérgico a frango"
+}
+
+### 4. Buscar pet por id -> 200
+GET {{baseUrl}}/pets/1
+Authorization: Bearer {{token}}
+
+### 5. Pet inexistente -> 404
+GET {{baseUrl}}/pets/99999
+Authorization: Bearer {{token}}
+
+### 6. Atualizar pet -> 200
+PUT {{baseUrl}}/pets/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "tutorId": "sera-ignorado",
+  "nome": "Thor",
+  "especie": "cachorro",
+  "raca": "Golden Retriever",
+  "sexo": "Macho",
+  "dataNascimento": "2022-03-15",
+  "peso": "29.1",
+  "castrado": true,
+  "foto": "",
+  "observacoes": "Alérgico a frango; peso atualizado"
+}
+
+### 7. Validação -> 400 com campo "nome"
+POST {{baseUrl}}/pets
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "nome": "",
+  "especie": "cachorro",
+  "sexo": "Macho"
+}
+
+### 8. Criar consulta -> 201 (petId como string)
+POST {{baseUrl}}/consultas
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "tutorId": "sera-ignorado",
+  "petId": "1",
+  "petNome": "",
+  "data": "2026-09-24",
+  "horario": "14:30",
+  "clinica": "Clyvo Vet — Unidade Paulista",
+  "veterinario": "Dra. Marina Alves",
+  "motivo": "Vacinação anual",
+  "status": "agendada",
+  "observacoes": ""
+}
+
+### 9. Consulta com pet de outro tutor -> 403
+POST {{baseUrl}}/consultas
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "petId": "999999",
+  "data": "2026-09-24",
+  "horario": "14:30",
+  "clinica": "Clyvo Vet",
+  "motivo": "Teste de acesso negado"
+}
+
+### 10. Listar consultas -> 200 []
+GET {{baseUrl}}/consultas
+Authorization: Bearer {{token}}
+
+### 11. Excluir pet -> 204 sem corpo
+DELETE {{baseUrl}}/pets/1
+Authorization: Bearer {{token}}
