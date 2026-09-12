@@ -3,6 +3,8 @@ package br.com.fiap.clyvovet.security;
 import br.com.fiap.clyvovet.dto.response.ErroResponse;
 import br.com.fiap.clyvovet.service.TutorService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseToken;
 import jakarta.servlet.FilterChain;
@@ -25,7 +27,19 @@ public class FirebaseTokenFilter extends OncePerRequestFilter {
     private static final Logger log = LoggerFactory.getLogger(FirebaseTokenFilter.class);
 
     private final TutorService tutorService;
-    private final ObjectMapper objectMapper = new ObjectMapper();
+
+    /**
+     * Este ObjectMapper é instanciado manualmente (o filtro não é um @Bean do
+     * Spring, então não recebe o ObjectMapper autoconfigurado por injeção).
+     * Por isso precisa registrar o JavaTimeModule explicitamente -- sem isso,
+     * serializar o campo `timestamp` (LocalDateTime) de ErroResponse lança
+     * InvalidDefinitionException, a exceção escapa do filtro, cai fora do
+     * securityMatcher da API e o Spring acaba respondendo com o redirect de
+     * login da cadeia web -- foi exatamente esse o efeito colateral observado.
+     */
+    private final ObjectMapper objectMapper = new ObjectMapper()
+            .registerModule(new JavaTimeModule())
+            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
     public FirebaseTokenFilter(TutorService tutorService) {
         this.tutorService = tutorService;
