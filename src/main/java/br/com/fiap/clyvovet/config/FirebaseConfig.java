@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
@@ -20,8 +21,19 @@ import java.nio.file.Path;
 /**
  * Inicializa o Firebase Admin SDK a partir da variável de ambiente FIREBASE_CREDENTIALS,
  * que pode conter tanto o caminho de um arquivo JSON quanto o próprio JSON da service account.
+ *
+ * @Lazy(false) é obrigatório aqui. A aplicação roda com
+ * spring.main.lazy-initialization=true (para reduzir uso de memória no plano
+ * gratuito do Render), o que faz o Spring só criar um bean quando algo pede
+ * ele explicitamente. Como nenhuma outra classe injeta FirebaseConfig, sem
+ * esta anotação o @PostConstruct abaixo NUNCA executa -- o Firebase Admin
+ * nunca inicializa, e toda chamada a FirebaseAuth.getInstance() (feita em
+ * FirebaseTokenFilter) falha com "FirebaseApp with name [DEFAULT] doesn't
+ * exist", mesmo com um token 100% válido. @Lazy(false) força esta classe
+ * específica a ser instanciada no boot, independente da configuração global.
  */
 @Configuration
+@Lazy(false)
 public class FirebaseConfig {
 
     private static final Logger log = LoggerFactory.getLogger(FirebaseConfig.class);
